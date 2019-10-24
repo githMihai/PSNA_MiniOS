@@ -1,0 +1,6 @@
+﻿  Performing Custom Build Tools
+  main.c
+  screen.c
+  Generating Code...
+  kernel.vcxproj -> C:\UTCN_SISC\PSNA\MiniOS\kernel\Release\kernel.exe
+          1 file(s) copied.
