@@ -1,0 +1,18 @@
+﻿  Performing Custom Build Tools
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:90: warning: register size specification ignored
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:95: warning: register size specification ignored
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:100: warning: register size specification ignored
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:104: warning: register size specification ignored
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:221: warning: symbol `ASMEntryPoint': GLOBAL directive after symbol definition is an experimental feature
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:221: warning: symbol `__cli': GLOBAL directive after symbol definition is an experimental feature
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:221: warning: symbol `__sti': GLOBAL directive after symbol definition is an experimental feature
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:221: warning: symbol `__magic': GLOBAL directive after symbol definition is an experimental feature
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:221: warning: symbol `__enableSSE': GLOBAL directive after symbol definition is an experimental feature
+  C:\UTCN_SISC\PSNA\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
+LINK : warning LNK4281: undesirable base address 0x200000 for x64 image; set base address above 4GB for best ASLR optimization
+  kernel.vcxproj -> C:\UTCN_SISC\PSNA\MiniOS\kernel\x64\Release\kernel.exe
+          1 file(s) copied.
