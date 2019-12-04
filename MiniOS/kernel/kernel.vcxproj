@@ -171,12 +171,32 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ata.c" />
+    <ClCompile Include="console.c" />
+    <ClCompile Include="interrupt.c" />
+    <ClCompile Include="iodevice.c" />
+    <ClCompile Include="keyboard.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="pit.c" />
+    <ClCompile Include="rct.c" />
     <ClCompile Include="screen.c" />
+    <ClCompile Include="stdfunc.c" />
+    <ClCompile Include="timer.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ata.h" />
+    <ClInclude Include="chars.h" />
+    <ClInclude Include="console.h" />
+    <ClInclude Include="interrupt.h" />
+    <ClInclude Include="iodevice.h" />
+    <ClInclude Include="keyboard.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="pit.h" />
+    <ClInclude Include="rtc.h" />
+    <ClInclude Include="scan_codes.h" />
     <ClInclude Include="screen.h" />
+    <ClInclude Include="stdfunc.h" />
+    <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="__init.asm">

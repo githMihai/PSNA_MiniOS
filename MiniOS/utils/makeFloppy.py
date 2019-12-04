@@ -1,4 +1,5 @@
 import os, sys, time
+from struct import pack
 
 floppyPath    = ".\\bin\\floppy.img"
 flpSize       = 1474560
@@ -23,11 +24,18 @@ for i in range(1, params):
 
 # add padding until sector 10 (hardcoded start for kernel.exe) offset 5120 | 0x1400
 size = out.tell()
-for i in range(0, ((512*10) - size)):
+for i in range(0, ((512*9) - size)):
     out.write(b'\0')
 
-if (os.path.getsize(kernelPath) > 50*512):
-    print("\n Warning: Kernel size > 50 sectors!\n")
+# write kernel size
+#out.write(pack('I', os.path.getsize(kernelPath)))
+out.write((os.path.getsize(kernelPath)).to_bytes(4, byteorder='big', signed=False))
+
+for i in range(0, 512 - 4):
+    out.write(b'\0')
+
+if (os.path.getsize(kernelPath) > 100*512):
+    print("\n Warning: Kernel size > 100 sectors!\n")
     
 #write the kernel
 out.write(open(kernelPath, "rb").read())
