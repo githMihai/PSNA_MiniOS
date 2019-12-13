@@ -213,3 +213,64 @@ unsigned long convertToULong(char* str)
 	}
 	return number;
 }
+
+BYTE convertToByte(char* str)
+{
+	int i;
+	int length = strlen(str);
+	BYTE number = 0;
+	for (i = 0; i < length; i++)
+	{
+		if (isDigit(str[i]))
+		{
+			if ((int)(number) * 10 + (str[i] - '0') > 255)
+			{
+				return 0;
+			}
+			number = number * 10 + (str[i] - '0');
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return number;
+}
+
+unsigned int convertToUInt(char* str)
+{
+	int i;
+	int length = strlen(str);
+	unsigned int number = 0;
+	for (i = 0; i < length; i++)
+	{
+		if (isDigit(str[i]))
+		{
+			number = number * 10 + (str[i] - '0');
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return number;
+}
+
+QWORD convertToQWord(char* str)
+{
+	int i;
+	int length = strlen(str);
+	QWORD number = 0;
+	for (i = 0; i < length; i++)
+	{
+		if (isDigit(str[i]))
+		{
+			number = number * 10 + (str[i] - '0');
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return number;
+}

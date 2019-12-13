@@ -4,8 +4,9 @@
 #include "timer.h"
 #include "chars.h"
 #include "rtc.h"
+#include "ata.h"
 
-#define NUMBER_OF_EXEC	4
+#define NUMBER_OF_EXEC	5
 
 //static int CurrentPos = 0;
 char consoleString[MAX_CONSOLE_CHARS] = { 0 };
@@ -20,10 +21,11 @@ static QWORD time;
 
 static EXEC_STRUCT execs[] =
 {
-	{"echo", { 0 }},
-	{"get_time", {"-c", "", "", "", ""}},
-	{"get_date", {"-c", "", "", "", ""}},
-	{"sleep", {"-m", "-s", "", ""}}
+	{"echo",		{ 0 }},
+	{"get_time",	{"-c", "", "", "", ""}},
+	{"get_date",	{"-c", "", "", "", ""}},
+	{"sleep",		{"-m", "-s", "", ""}},
+	{"disk",		{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize"}}
 };
 
 
@@ -370,6 +372,36 @@ void ExecuteConsole()
 						Sleep(time * 1000);
 						break;
 					}
+				}
+			}
+			case DISK:
+			{
+				if (console.Ccommand->argc != 5)
+				{
+					printf("Not enough arguments, %d \n", console.Ccommand->argc);
+					break;
+				}
+				if (!strcmp(console.Ccommand->args[0], execs[DISK].args[0]))
+				{
+					BYTE sectors = convertToByte(console.Ccommand->args[1]);
+					unsigned int lba = convertToUInt(console.Ccommand->args[2]);
+					QWORD bufferAddr = convertToQWord(console.Ccommand->args[3]);
+					WORD* buffer = bufferAddr;
+					printf("bufferAddr: %x\n", buffer);
+					unsigned int bufferSize = convertToUInt(console.Ccommand->args[4]);
+					ide_read_sectors(0, sectors, lba, buffer, bufferSize);
+					break;
+				}
+				if (!strcmp(console.Ccommand->args[0], execs[DISK].args[1]))
+				{
+					BYTE sectors = convertToByte(console.Ccommand->args[1]);
+					unsigned int lba = convertToUInt(console.Ccommand->args[2]);
+					QWORD bufferAddr = convertToQWord(console.Ccommand->args[3]);
+					WORD* buffer = bufferAddr;
+					printf("bufferAddr: %x\n", buffer);
+					unsigned int bufferSize = convertToUInt(console.Ccommand->args[4]);
+					ide_write_sectors(0, sectors, lba, buffer, bufferSize);
+					break;
 				}
 			}
 			default:

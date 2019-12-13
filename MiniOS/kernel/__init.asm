@@ -205,71 +205,118 @@ __set_intr_flags:
 	popf
 	ret
 
+%macro __pushaq 0
+    [bits 64]
+    push rax
+    push rcx
+    push rdx
+    push rbx
+    push rbp
+    push rsi
+    push rdi
+%endmacro
+
+%macro __popaq 0
+    [bits 64]
+    pop rdi
+    pop rsi
+    pop rbp
+    pop rbx
+    pop rdx
+    pop rcx
+    pop rax
+%endmacro
+
+
 __IRQ0:
     [bits 64]
-    ;pushad
+    __pushaq
     call IRQ0_handler
-    ;popad
+    __popaq
     iretq
 
 __IRQ1:
     [bits 64]
+    __pushaq
     call IRQ1_handler
+    __popaq
     iretq
 
 __IRQ2:
     [bits 64]
+    __pushaq
     call IRQ2_handler
+    __popaq
     iretq
 
 __IRQ3:
     [bits 64]
+    __pushaq
     call IRQ3_handler
+    __popaq
     iretq
 
 __IRQ4:
     [bits 64]
+    __pushaq
     call IRQ4_handler
+    __popaq
     iretq
 
 __IRQ5:
     [bits 64]
+    __pushaq
     call IRQ5_handler
+    __popaq
     iretq
 
 __IRQ6:
     [bits 64]
+    __pushaq
     call IRQ6_handler
+    __popaq
     iretq
 
 __IRQ7:
     [bits 64]
+    __pushaq
     call IRQ7_handler
+    __popaq
     iretq
 
 __IRQ8:
     [bits 64]
+    __pushaq
     call IRQ8_handler
+    __popaq
     iretq
 
 __IRQ9:
     [bits 64]
+    __pushaq
     call IRQ9_handler
+    __popaq
     iretq
 
 __ERQ5:
     [bits 64]
+    __pushaq
     call ERQ5_handler
+    __popaq
     iretq
 
 __ERQ8:
     [bits 64]
+    __pushaq
     call ERQ8_handler
+    __popaq
     iretq
 
 __ERQ14:
     [bits 64]
+    __pushaq
     call ERQ14_handler
+    __popaq
     iretq
 
 EXPORT2C ASMEntryPoint, __cli, __sti, __magic, __enableSSE, __get_intr_flags, __set_intr_flags, __IRQ0, __IRQ1, __IRQ2, __IRQ3, __IRQ4, __IRQ5, __IRQ6, __IRQ7, __IRQ8, __IRQ9, __ERQ5, __ERQ8, __ERQ14

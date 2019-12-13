@@ -7,6 +7,8 @@
 #include "console.h"
 #include "ata.h"
 
+WORD* buf[1000];
+
 void KernelMain()
 {
     //__magic();    // break into BOCHS
@@ -30,14 +32,21 @@ void KernelMain()
 	InitConsole();
 	__sti();
 	//detect_ata();
-	identify_ata(FIRST_DRIVE_PORT_BASE, ATA_MASTER);
+	//ATAIdentify(FIRST_DRIVE_PORT_BASE, ATA_MASTER);
+	ide_initialize(	FIRST_DRIVE_PORT_BASE, 
+					FIRST_DRIVE_CONTROL_BASE, 
+					SECOND_DRIVE_PORT_BASE, 
+					SECOND_DRIVE_CONTROL_BASE, 
+					0x000);
+	//ide_read_sectors(0, 1, 0, 0, 0);
+	//ide_read_sectors(0, 1, 0, buf, 1000);
+	//printf("bufAddr: %x\n", buf);
+	//__magic();
 	//__magic();
 	ExecuteConsole();
 
-	int i = 0;
 	while (1)
 	{
-		//printf("Mama are mere %d\n", i);
 		/*ClearScreen();
 		printf("time = %d\n", SysGetTime());
 		mSleep(100);

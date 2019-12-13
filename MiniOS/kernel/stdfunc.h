@@ -22,5 +22,8 @@ char toUpper(char c);
 char toLower(char c);
 BOOLEAN isDigtc(char c);
 unsigned long convertToULong(char* str);
+BYTE convertToByte(char str);
+unsigned int convertToUInt(char* str);
+QWORD convertToQWord(char* str);
 
 #endif // _STDFUNC_H_
