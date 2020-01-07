@@ -25,6 +25,7 @@ typedef signed __int64      INT64;
 //
 void __cli(void);
 void __sti(void);
+void __hlt(void);
 void __magic(void);         // MAGIC breakpoint into BOCHS (XCHG BX,BX)
 void __enableSSE(void);
 void __IRQ0(void);
@@ -37,6 +38,7 @@ void __IRQ6(void);
 void __IRQ7(void);
 void __IRQ8(void);
 void __IRQ9(void);
+void __ERQ0(void);
 void __ERQ5(void);
 void __ERQ8(void);
 void __ERQ14(void);

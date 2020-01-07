@@ -177,6 +177,7 @@
     <ClCompile Include="iodevice.c" />
     <ClCompile Include="keyboard.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="memory.c" />
     <ClCompile Include="pit.c" />
     <ClCompile Include="rct.c" />
     <ClCompile Include="screen.c" />
@@ -191,6 +192,7 @@
     <ClInclude Include="iodevice.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="memory.h" />
     <ClInclude Include="pit.h" />
     <ClInclude Include="rtc.h" />
     <ClInclude Include="scan_codes.h" />

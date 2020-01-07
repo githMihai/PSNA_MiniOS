@@ -1,15 +1,18 @@
-﻿  Performing Custom Build Tools
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:86: warning: symbol `ASMEntryPoint': GLOBAL directive after symbol definition is an experimental feature
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:86: warning: symbol `__cli': GLOBAL directive after symbol definition is an experimental feature
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:86: warning: symbol `__sti': GLOBAL directive after symbol definition is an experimental feature
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:86: warning: symbol `__magic': GLOBAL directive after symbol definition is an experimental feature
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:86: warning: symbol `__enableSSE': GLOBAL directive after symbol definition is an experimental feature
-  C:\UTCN_SISC\MiniOS_1\MiniOS\kernel\__init.asm:25: ... from macro `EXPORT2C' defined here
-  main.c
-  screen.c
+﻿  ata.c
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(201,15): warning C4101: 'error': unreferenced local variable
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(331,7): warning C4101: 'sectorcount': unreferenced local variable
+  stdfunc.c
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(511,75): warning C4020: 'ide_ata_access': too many actual parameters
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(14,24): warning C4090: '=': different 'const' qualifiers
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(20,11): warning C4033: 'printf' must return a value
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(36,12): error C4146: unary minus operator applied to unsigned type, result still unsigned
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(67,24): warning C4090: '=': different 'const' qualifiers
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(74,11): warning C4033: 'sprintf' must return a value
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(89,11): error C4146: unary minus operator applied to unsigned type, result still unsigned
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(92,10): warning C4013: 'strcpy' undefined; assuming extern returning int
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(93,15): warning C4013: 'strlen' undefined; assuming extern returning int
   Generating Code...
-LINK : fatal error LNK1561: entry point must be defined
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(218,1): warning C4028: formal parameter 1 different from declaration
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(326): warning C4715: 'PoollingUntilReady': not all control paths return a value
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(332): warning C4716: 'ATAGetSectorCount': must return a value
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(443): error C4700: uninitialized local variable 'err' used

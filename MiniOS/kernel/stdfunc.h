@@ -25,5 +25,6 @@ unsigned long convertToULong(char* str);
 BYTE convertToByte(char str);
 unsigned int convertToUInt(char* str);
 QWORD convertToQWord(char* str);
+int roundUp(double number);
 
 #endif // _STDFUNC_H_

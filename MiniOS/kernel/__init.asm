@@ -27,7 +27,7 @@
 
 %define break xchg bx, bx
 
-IMPORTFROMC KernelMain, IRQ0_handler, IRQ1_handler, IRQ2_handler, IRQ3_handler, IRQ4_handler, IRQ5_handler, IRQ6_handler, IRQ7_handler, IRQ8_handler, IRQ9_handler, ERQ5_handler, ERQ8_handler, ERQ14_handler
+IMPORTFROMC KernelMain, IRQ0_handler, IRQ1_handler, IRQ2_handler, IRQ3_handler, IRQ4_handler, IRQ5_handler, IRQ6_handler, IRQ7_handler, IRQ8_handler, IRQ9_handler, ERQ0_handler, ERQ5_handler, ERQ8_handler, ERQ14_handler
 
 TOP_OF_STACK                equ 0x200000
 KERNEL_BASE_PHYSICAL        equ 0x200000
@@ -37,6 +37,7 @@ PDE_ADDR                    equ 0x403000
 PT_0_ADDR                   equ 0x404000
 PT_1_ADDR                   equ 0x405000
 PT_2_ADDR                   equ 0x406000
+PT_3_ADDR                   equ 0x409000
 PAGE_SIZE                   equ 0x1000  ;4KB
 
 READ_WRITE_PRESENT          equ 0x3
@@ -130,6 +131,16 @@ call __enableSSE
             add eax, PAGE_SIZE          ; Compute the physical address of the next page.
             add edi, PTE_SIZE           ; Increase the destiantion index into the page table.
             loop .loop_2
+    ; Forth Page Table
+    PT_3:
+        mov edi, PT_3_ADDR  ; Set the destination index register to point to fist entry in PT_2.
+        mov ecx, PT_SIZE    ; Set the count register to 512 (number of entries in a bage table).
+        .loop_3:
+            or eax, READ_WRITE_PRESENT  ; Set all pages form the Page Table to be readable/writable and present.
+            mov DWORD [edi], eax        ; Put the physical address of the page into the coresponding entry in Page Table.
+            add eax, PAGE_SIZE          ; Compute the physical address of the next page.
+            add edi, PTE_SIZE           ; Increase the destiantion index into the page table.
+            loop .loop_3
 
     ;TODO!!! activate pagging
     activate_paging:
@@ -179,6 +190,10 @@ __cli:
 __sti:
     STI
     RET
+
+__hlt:
+	HLT
+	RET
 
 __magic:
     XCHG    BX,BX
@@ -298,6 +313,13 @@ __IRQ9:
     __popaq
     iretq
 
+__ERQ0:
+    [bits 64]
+    __pushaq
+    call ERQ0_handler
+    __popaq
+    iretq
+
 __ERQ5:
     [bits 64]
     __pushaq
@@ -319,6 +341,21 @@ __ERQ14:
     __popaq
     iretq
 
-EXPORT2C ASMEntryPoint, __cli, __sti, __magic, __enableSSE, __get_intr_flags, __set_intr_flags, __IRQ0, __IRQ1, __IRQ2, __IRQ3, __IRQ4, __IRQ5, __IRQ6, __IRQ7, __IRQ8, __IRQ9, __ERQ5, __ERQ8, __ERQ14
+; FAST_CALL convention 
+; return: RAX
+__getPAE:
+    [bits 64]
+    mov RAX, CR4
+    ret
+
+; FAST_CALL convention 
+; parameter: RCX
+__setPAE:
+    [bits 64]
+    mov CR4, RCX
+    ret
+
+
+EXPORT2C ASMEntryPoint, __cli, __sti, __magic, __enableSSE, __get_intr_flags, __set_intr_flags, __IRQ0, __IRQ1, __IRQ2, __IRQ3, __IRQ4, __IRQ5, __IRQ6, __IRQ7, __IRQ8, __IRQ9, __ERQ0, __ERQ5, __ERQ8, __ERQ14, __hlt
 
 

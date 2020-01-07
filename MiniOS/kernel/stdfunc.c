@@ -1,6 +1,7 @@
 #include "stdfunc.h"
 #include "stdlib.h"
 #include "screen.h"
+#include <math.h>
 
 int printf(const char* format, ...)
 {
@@ -273,4 +274,17 @@ QWORD convertToQWord(char* str)
 		}
 	}
 	return number;
+}
+
+int roundUp(double number)
+{
+	if ((int)number == number)
+	{
+		return (int)number;
+	}
+	else
+	{
+		return (int)number + 1;
+	}
+	//return ((int)number) ? (((int)number) == number) : ((int)number + 1);
 }

@@ -1,89 +1,39 @@
-﻿  ata.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(201,15): warning C4101: 'error': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(331,7): warning C4101: 'sectorcount': unreferenced local variable
-  console.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(511,75): warning C4020: 'ide_ata_access': too many actual parameters
+﻿  main.c
 C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\scan_codes.h(104,14): warning C4566: character represented by universal-character-name '\uFFFD' cannot be represented in the current code page (1252)
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\chars.h(5,25): warning C4129: 'Q': unrecognized character escape sequence
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(97,13): warning C4033: 'function' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(99,25): warning C4013: 'findChar' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(107,22): warning C4013: 'toLower' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(114,22): warning C4013: 'toUpper' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(132,10): warning C4033: 'function' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(140,10): warning C4033: 'function' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(148,10): warning C4033: 'function' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(177,28): warning C4047: 'function': 'PFUNC' differs in levels of indirection from 'PFUNC (__cdecl *)(KeyStatus)'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(177,28): warning C4024: 'KeyboardSubscribe': different types for formal and actual parameter 1
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(156,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(206,75): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(207,73): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(218,13): warning C4013: 'removeChar' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(213,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(227,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(303,12): warning C4013: 'sprintf' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(304,11): warning C4013: 'printf' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(364,34): warning C4013: 'convertToULong' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(386,34): warning C4013: 'convertToByte' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(387,38): warning C4013: 'convertToUInt' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(388,39): warning C4013: 'convertToQWord' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(389,1): warning C4047: 'initializing': 'WORD *' differs in levels of indirection from 'QWORD'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(400,1): warning C4047: 'initializing': 'WORD *' differs in levels of indirection from 'QWORD'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(273,9): warning C4101: 'j': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(273,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(438,13): warning C4013: 'insertChar' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(440,43): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(447,43): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  interrupt.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(482,74): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\scan_codes.h(104,14): warning C4566: character represented by universal-character-name '\uFFFD' cannot be represented in the current code page (1252)
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(199,51): warning C4244: '=': conversion from 'QWORD' to 'WORD', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(82,8): warning C4101: 'irq10_address': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(81,8): warning C4101: 'irq9_address': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(89,8): warning C4101: 'idt_ptr': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(84,8): warning C4101: 'irq12_address': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(83,8): warning C4101: 'irq11_address': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(87,8): warning C4101: 'irq15_address': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(86,8): warning C4101: 'irq14_address': unreferenced local variable
-  keyboard.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\interrupt.c(85,8): warning C4101: 'irq13_address': unreferenced local variable
-  main.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\scan_codes.h(104,14): warning C4566: character represented by universal-character-name '\uFFFD' cannot be represented in the current code page (1252)
-  pit.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\scan_codes.h(104,14): warning C4566: character represented by universal-character-name '\uFFFD' cannot be represented in the current code page (1252)
-  rct.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\pit.c(21,44): warning C4244: 'function': conversion from 'WORD' to 'unsigned char', possible loss of data
-  screen.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\rct.c(58,13): warning C4244: 'return': conversion from 'QWORD' to 'TIME', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\screen.c(91,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\screen.c(177,38): warning C4020: 'PutChar': too many actual parameters
-  stdfunc.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\screen.c(192,11): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(14,24): warning C4090: '=': different 'const' qualifiers
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(20,11): warning C4033: 'printf' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(36,12): warning C4146: unary minus operator applied to unsigned type, result still unsigned
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(67,24): warning C4090: '=': different 'const' qualifiers
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(74,11): warning C4033: 'sprintf' must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(89,11): warning C4146: unary minus operator applied to unsigned type, result still unsigned
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(93,31): warning C4244: '+=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(97,30): warning C4244: '+=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(103,31): warning C4244: '+=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(107,18): warning C4244: '+=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(144,1): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(201,1): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(218,1): warning C4028: formal parameter 1 different from declaration
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(220,1): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(243,1): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-  timer.c
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(262,1): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\timer.c(31,28): warning C4013: 'GetIntFlags' undefined; assuming extern returning int
+  memory.c
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\main.c(15,8): warning C4013: 'printf' undefined; assuming extern returning int
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(35,8): warning C4013: 'printf' undefined; assuming extern returning int
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(116,63): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(134,64): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(162,65): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(123,6): warning C4101: 'i': unreferenced local variable
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(171,1): warning C4028: formal parameter 1 different from declaration
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(173,66): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(203,38): warning C4047: 'return': 'MEM_LIST_ELEM *' differs in levels of indirection from 'MEMORY_MAP **'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(244,40): warning C4047: '>=': 'QWORD' differs in levels of indirection from 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(245,62): warning C4047: '<=': 'QWORD' differs in levels of indirection from 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(275,70): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(277,50): warning C4133: '==': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(278,54): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(278,54): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(287,49): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(287,49): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(308,71): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(314,48): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(314,48): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(379,55): warning C4013: 'roundUp' undefined; assuming extern returning int
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(379,74): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(397,42): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(473,48): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(491,44): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(509,75): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(524,43): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(470,1): warning C4133: 'initializing': incompatible types - from 'BYTE *' to 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(344,17): warning C4101: 'PrevMemMap': unreferenced local variable
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(574,33): warning C4047: 'function': 'QWORD' differs in levels of indirection from 'QWORD *'
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(574,33): warning C4024: 'AddressInsideBlock': different types for formal and actual parameter 1
   Generating Code...
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\timer.c(34,8): warning C4013: 'SetInt' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(55): warning C4716: 'printf': must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\stdfunc.c(113): warning C4716: 'sprintf': must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\console.c(152): warning C4716: 'function': must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(332): warning C4716: 'ATAGetSectorCount': must return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(326): warning C4715: 'PoollingUntilReady': not all control paths return a value
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\ata.c(443): warning C4700: uninitialized local variable 'err' used
+C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(560,17): warning C4101: 'e': unreferenced local variable
 LINK : warning LNK4281: undesirable base address 0x200000 for x64 image; set base address above 4GB for best ASLR optimization
   kernel.vcxproj -> C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\x64\Release\kernel.exe
           1 file(s) copied.

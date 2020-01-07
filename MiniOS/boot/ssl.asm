@@ -8,7 +8,7 @@ KERNEL_ADDRESS_BX   equ 0x10
 KERNEL_READ_ADDRESS equ 0x10000
 KERNEL_ADDRESS      equ 0x200000
 KERNEL_SECTORS      equ 50
-READ_BATCH          equ 50
+READ_BATCH          equ 70
 SECTOR_SIZE         equ 512
 HPC                 equ 2
 SPT                 equ 18

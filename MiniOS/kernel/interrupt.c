@@ -88,11 +88,20 @@ void InitIDT()
 	QWORD idt_address;
 	QWORD idt_ptr[2];
 
+	QWORD exception0_address;
 	QWORD exception5_address;
 	QWORD exception8_address;
 	QWORD exception14_address;
 
 	PIC_remap(0x20, 0x28);
+
+	exception0_address = (QWORD)__ERQ0;
+	IDT[0].offset_1 = (exception0_address & 0xffffffff00000000) >> 32;
+	IDT[0].offset_2 = (exception0_address & 0x00000000ffff0000) >> 16;
+	IDT[0].type_attr = 0x8e;
+	IDT[0].zero = 0;
+	IDT[0].selector = 48;
+	IDT[0].offset_3 = (exception0_address & 0xffff);
 
 	exception5_address = (QWORD)__ERQ5;
 	IDT[5].offset_1 = (exception5_address & 0xffffffff00000000) >> 32;
@@ -284,6 +293,13 @@ void IRQ9_handler()
 {
 	debugPrint("IRQ9", 4);
 	PIC_sendEOI(9);
+}
+
+void ERQ0_handler()
+{
+	debugPrint("Division By zero", 17);
+	__cli();
+	__hlt();
 }
 
 void ERQ5_handler()

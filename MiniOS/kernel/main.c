@@ -6,20 +6,27 @@
 #include "keyboard.h"
 #include "console.h"
 #include "ata.h"
+#include "memory.h"
 
 WORD* buf[1000];
 
+int divideByZero(int param)
+{
+	printf("Devide\n");
+	__magic();
+	printf("Div  0 = %d\n", 10 / param);
+	return param;
+}
+
 void KernelMain()
 {
-    //__magic();    // break into BOCHS
+    __magic();    // break into BOCHS
     
     //__enableSSE();  // only for demo; in the future will be called from __init.asm
-
     ClearScreen();
 	//__magic();
-
+	__magic();
 	HelloBoot();
-
 	PIC_remap(0x20, 0x28);
 	ClearScreen();
 	InitIDT();
@@ -42,8 +49,45 @@ void KernelMain()
 	//ide_read_sectors(0, 1, 0, buf, 1000);
 	//printf("bufAddr: %x\n", buf);
 	//__magic();
-	//__magic();
+	//__magic();	
+	//divideByZero(0);
+	InitMemory();
+	//printf("BitMap addr: %x\n", &(BitMap.bits));
+	/*PageAlloc(1);
+	PageAlloc(1);
+	PageAlloc(100);*/
+	__magic();
+	ClearScreen();
+	QWORD* address0 = MemBlockAlloc(1);
+	if (address0 != NULL)
+		printf("Memory Address = %x\n", address0);
+	else
+		printf("NULL\n");
+	__magic();
+	ClearScreen();
+	QWORD* address1 = MemBlockAlloc(10);
+	if (address1 != NULL)
+		printf("Memory Address = %x\n", address1);
+	else
+		printf("NULL\n");
+	__magic();
+	ClearScreen();
+	QWORD* address2 = MemBlockAlloc(4200);
+	if (address2 != NULL)
+		printf("Memory Address = %x\n", address2);
+	else
+		printf("NULL\n");
+	__magic();
+	//ClearScreen();
+	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	MemBlockFree(address2);
+	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	MemBlockFree(address1);
+	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	MemBlockFree(address0);
+	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
 	ExecuteConsole();
+
 
 	while (1)
 	{
