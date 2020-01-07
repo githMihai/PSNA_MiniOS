@@ -1,39 +1,6 @@
 ﻿  main.c
 C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\scan_codes.h(104,14): warning C4566: character represented by universal-character-name '\uFFFD' cannot be represented in the current code page (1252)
-  memory.c
 C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\main.c(15,8): warning C4013: 'printf' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(35,8): warning C4013: 'printf' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(116,63): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(134,64): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(162,65): warning C4047: 'return': 'QWORD *' differs in levels of indirection from 'QWORD'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(123,6): warning C4101: 'i': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(171,1): warning C4028: formal parameter 1 different from declaration
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(173,66): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(203,38): warning C4047: 'return': 'MEM_LIST_ELEM *' differs in levels of indirection from 'MEMORY_MAP **'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(244,40): warning C4047: '>=': 'QWORD' differs in levels of indirection from 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(245,62): warning C4047: '<=': 'QWORD' differs in levels of indirection from 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(275,70): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(277,50): warning C4133: '==': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(278,54): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(278,54): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(287,49): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(287,49): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(308,71): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(314,48): warning C4047: 'function': 'int' differs in levels of indirection from 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(314,48): warning C4024: 'IsAlligned': different types for formal and actual parameter 1
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(379,55): warning C4013: 'roundUp' undefined; assuming extern returning int
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(379,74): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(397,42): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(473,48): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(491,44): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(509,75): warning C4133: '=': incompatible types - from 'QWORD *' to 'BYTE *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(524,43): warning C4133: '=': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(470,1): warning C4133: 'initializing': incompatible types - from 'BYTE *' to 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(344,17): warning C4101: 'PrevMemMap': unreferenced local variable
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(574,33): warning C4047: 'function': 'QWORD' differs in levels of indirection from 'QWORD *'
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(574,33): warning C4024: 'AddressInsideBlock': different types for formal and actual parameter 1
-  Generating Code...
-C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\memory.c(560,17): warning C4101: 'e': unreferenced local variable
 LINK : warning LNK4281: undesirable base address 0x200000 for x64 image; set base address above 4GB for best ASLR optimization
   kernel.vcxproj -> C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\x64\Release\kernel.exe
           1 file(s) copied.

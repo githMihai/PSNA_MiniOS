@@ -64,28 +64,30 @@ void KernelMain()
 	else
 		printf("NULL\n");
 	__magic();
-	ClearScreen();
+	//ClearScreen();
 	QWORD* address1 = MemBlockAlloc(10);
 	if (address1 != NULL)
 		printf("Memory Address = %x\n", address1);
 	else
 		printf("NULL\n");
 	__magic();
-	ClearScreen();
+	//ClearScreen();
 	QWORD* address2 = MemBlockAlloc(4200);
 	if (address2 != NULL)
 		printf("Memory Address = %x\n", address2);
 	else
 		printf("NULL\n");
 	__magic();
-	//ClearScreen();
 	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	printf("free %x\n", address2);
 	MemBlockFree(address2);
-	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	printf("BitMap[0] after free: %x, addr: %x\n", address2, (BitMap.bits[0]));
+	printf("free %x\n", address1);
 	MemBlockFree(address1);
-	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	printf("BitMap[0] after free: %x, addr: %x\n", address1, (BitMap.bits[0]));
+	printf("free %x\n", address0);
 	MemBlockFree(address0);
-	printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+	printf("BitMap[0] after free: %x, addr: %x\n", address0, (BitMap.bits[0]));
 	ExecuteConsole();
 
 

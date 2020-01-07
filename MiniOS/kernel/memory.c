@@ -193,6 +193,22 @@ MEM_LIST_ELEM* GetFirstAvailable()
 	return NULL;
 }
 
+void PrintMemMap(MEMORY_MAP map)
+{
+	printf("(a:%x,%d)", map.Address, map.Size, map.IsFree);
+}
+
+void PrintList(MEM_LIST *list)
+{
+	MEM_LIST_ELEM* e = ListBegin(list);
+	while (e != ListEnd(list))
+	{
+		PrintMemMap(*e->MapElem);
+		printf("->");
+		e = e->Next;
+	}
+}
+
 void ListInsert(MEM_LIST_ELEM* before, MEM_LIST_ELEM* elem)
 {
 	elem->Prev = before->Prev;
@@ -229,7 +245,7 @@ BOOLEAN ListEmpty(MEM_LIST *list)
 BOOLEAN AddressInsideBlock(QWORD address, MEM_LIST_ELEM* block)
 {
 	if (address >= block->MapElem->Address&&
-		address <= (block->MapElem->Address + block->MapElem->Size))
+		address < (block->MapElem->Address + block->MapElem->Size))
 	{
 		return TRUE;
 	}
@@ -256,9 +272,7 @@ void CompactFreeBlocks()
 	FreeTail = ListEnd(&FreeBlocks);
 	CurrentBlock = ListBegin(&FreeBlocks);
 	while (CurrentBlock != FreeTail)
-	/*for (CurrentBlock = ListBegin(&FreeBlocks); CurrentBlock->Next != ListEnd(&FreeBlocks); CurrentBlock = CurrentBlock->Next)*/
 	{
-		//printf("next: %x\n", CurrentBlock->Next->MapElem->Address);
 		addr = CurrentBlock->MapElem->Address + CurrentBlock->MapElem->Size;
 		while ((CurrentBlock->Next != ListEnd(&FreeBlocks)) &&
 				(addr == CurrentBlock->Next->MapElem->Address) &&
@@ -270,35 +284,19 @@ void CompactFreeBlocks()
 			DisposableBlock->MapElem->Address	= NULL;
 			DisposableBlock->MapElem->IsFree = U_BOOL;
 			DisposableBlock->MapElem->Size = 0;
-			//if (!((QWORD)CurrentBlock->MapElem->Address & 0xfff))
-			if (IsAlligned(CurrentBlock->MapElem->Address))
-			{
-				if ((QWORD)PAGE_SIZE == (QWORD)CurrentBlock->MapElem->Size)
-				{
-					page = ((QWORD)CurrentBlock->MapElem->Address - (QWORD)MEMORY_MAP_ADDRESS) >> 12;
-					PageFree(page);
-					DisposableBlock = CurrentBlock;
-					CurrentBlock = CurrentBlock->Next;
-					ListRemove(DisposableBlock);
-					DisposableBlock->MapElem->Address = NULL;
-					DisposableBlock->MapElem->IsFree = U_BOOL;
-					DisposableBlock->MapElem->Size = 0;
-				}
-				else if ((QWORD)PAGE_SIZE < (QWORD)CurrentBlock->MapElem->Size)
-				{
-					page = ((QWORD)CurrentBlock->MapElem->Address - (QWORD)MEMORY_MAP_ADDRESS) >> 12;
-					PageFree(page);
-					CurrentBlock->MapElem->Address += PAGE_SIZE;
-					CurrentBlock->MapElem->Size -= PAGE_SIZE;
-				}
-			}
 			addr = CurrentBlock->MapElem->Address + CurrentBlock->MapElem->Size;
 			if (CurrentBlock->Next == ListEnd(&FreeBlocks))
 			{
 				break;
 			}
 		}
-		if (IsAlligned(CurrentBlock->MapElem->Address))
+		CurrentBlock = CurrentBlock->Next;
+	}
+
+	CurrentBlock = ListBegin(&FreeBlocks);
+	while (CurrentBlock != FreeTail)
+	{
+		while (IsAlligned(CurrentBlock->MapElem->Address))
 		{
 			if ((QWORD)PAGE_SIZE == (QWORD)CurrentBlock->MapElem->Size)
 			{
@@ -318,6 +316,14 @@ void CompactFreeBlocks()
 				CurrentBlock->MapElem->Address += PAGE_SIZE;
 				CurrentBlock->MapElem->Size -= PAGE_SIZE;
 			}
+			else
+			{
+				CurrentBlock = CurrentBlock->Next;
+			}
+			if (CurrentBlock == FreeTail)
+			{
+				return;
+			}
 		}
 		CurrentBlock = CurrentBlock->Next;
 	}
@@ -325,135 +331,40 @@ void CompactFreeBlocks()
 
 QWORD* MemBlockAlloc(int size)
 {
-	BOOLEAN allocated = FALSE;
 	MEM_LIST_ELEM* CurrentMemMap;
 	MEM_LIST_ELEM* AvailableBlock;
 	MEM_LIST_ELEM* PrevMemMap;
 	QWORD *addr = NULL;
-	//CurrentMemMap = ListBegin(FreeBlocks);
-	//if (CurrentMemMap->MapElem == NULL)
-	//{
-	//	MemMap[unusedBlockIndex].IsFree = FALSE;
-	//	MemMap[unusedBlockIndex].Address = PageAlloc(roundUp(size / PAGE_SIZE));
-	//	MemMap[unusedBlockIndex].Size = size;
-	//	//CurrentMemMap->Prev = ListBegin(FreeBlocks)->Prev;
-	//	//CurrentMemMap->Next = ListBegin(FreeBlocks);
-	//	//ListBegin(FreeBlocks)->Prev->Next = CurrentMemMap;
-	//	//ListBegin(FreeBlocks)->Prev = CurrentMemMap;
-	//	CurrentMemMap->MapElem = MemMap + unusedBlockIndex;
-	//	unusedBlockIndex++;
-	//	ListInsert(ListBegin(OccupiedBlocks), CurrentMemMap);
-
-	//	if (roundUp(size / PAGE_SIZE) * PAGE_SIZE - size > 0)
-	//	{
-	//		MemMap[unusedBlockIndex].IsFree = TRUE;
-	//		MemMap[unusedBlockIndex].Address = CurrentMemMap->MapElem->Address + size;
-	//		MemMap[unusedBlockIndex].Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
-	//		CurrentMemMap->MapElem = MemMap + unusedBlockIndex;
-	//		unusedBlockIndex++;
-	//		ListInsert(ListBegin(FreeBlocks), CurrentMemMap);
-	//	}
-	//}
-	//while (!allocated)
 	{
 		/* Search for first free block. */
 		if (ListEmpty(&FreeBlocks))
 		{
-			//printf("List is empty\n");
-			//CurrentMemMap = ListBegin(&FreeBlocks);
 			CurrentMemMap = GetFirstAvailable();
 			CurrentMemMap->MapElem->IsFree = FALSE;
-			CurrentMemMap->MapElem->Address = PageAlloc(roundUp(size / PAGE_SIZE));
+			CurrentMemMap->MapElem->Address = PageAlloc(roundUp((double)size / (double)PAGE_SIZE));
 			CurrentMemMap->MapElem->Size = size;
-			/*AvailableBlocks[unusedBlockIndex].MapElem->IsFree = FALSE;
-			AvailableBlocks[unusedBlockIndex].MapElem->Address = PageAlloc(roundUp(size / PAGE_SIZE));
-			AvailableBlocks[unusedBlockIndex].MapElem->Size = size;*/
 			occupiedBlocks++;
-			//CurrentMemMap->Prev = ListBegin(FreeBlocks)->Prev;
-			//CurrentMemMap->Next = ListBegin(FreeBlocks);
-			//ListBegin(FreeBlocks)->Prev->Next = CurrentMemMap;
-			//ListBegin(FreeBlocks)->Prev = CurrentMemMap;
-			//printf("MemElem[%d]: %x\n", unusedBlockIndex, &AvailableBlocks[unusedBlockIndex]);
-			//CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
-			//CurrentMemMap = AvailableBlock;
 			unusedBlockIndex++;
-			printf("Insert occupied %x\n", CurrentMemMap);
-			//ListInsert(ListEnd(&OccupiedBlocks), CurrentMemMap);
 			ListInsertOrdered(&OccupiedBlocks, CurrentMemMap);
-			printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
 			addr = CurrentMemMap->MapElem->Address;
-			//printf("Remain: %d\n", roundUp(size / PAGE_SIZE) * PAGE_SIZE - size);
-			if (roundUp(size / PAGE_SIZE) * PAGE_SIZE - size > 0)
+			if (roundUp((double)size / (double)PAGE_SIZE) * PAGE_SIZE - size > 0)
 			{
 				AvailableBlock = GetFirstAvailable();
 				AvailableBlock->MapElem->IsFree = TRUE;
 				AvailableBlock->MapElem->Address = CurrentMemMap->MapElem->Address + size;
-				AvailableBlock->MapElem->Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
+				AvailableBlock->MapElem->Size = roundUp((double)size / (double)PAGE_SIZE) * PAGE_SIZE - size;
 				CurrentMemMap = AvailableBlock;
-				//AvailableBlocks[unusedBlockIndex].MapElem->IsFree = TRUE;
-				//AvailableBlocks[unusedBlockIndex].MapElem->Address = CurrentMemMap->MapElem->Address + size;
-				//AvailableBlocks[unusedBlockIndex].MapElem->Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
-				////printf("MemElem[%d]: %x\n", unusedBlockIndex, &AvailableBlocks[unusedBlockIndex]);
-				//CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
-				//unusedBlockIndex++;
-				//printf("Unused Block index: %d\n", unusedBlockIndex);
-				//printf("Head: %x, Tail: %x, Curent: %x\n", ListBegin(FreeBlocks), ListEnd(FreeBlocks), CurrentMemMap);
-				printf("Insert free %x\n", CurrentMemMap);
-				//ListInsert(ListEnd(&FreeBlocks), CurrentMemMap);
 				ListInsertOrdered(&FreeBlocks, CurrentMemMap);
-				printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
 				freeBlocks++;
 			}
 		}
 		else
 		{
 			CurrentMemMap = ListBegin(&FreeBlocks);
-			//printf("Begin %x\n", CurrentMemMap);
 			while (CurrentMemMap != ListEnd(&FreeBlocks))
 			{
-				printf("Current %x\n", CurrentMemMap);
-				//__magic();
-				//printf("List is not empty\n");
-				printf("Free: %d\n", freeBlocks);
-				printf("Occupied: %d\n", occupiedBlocks);
-				/*if (CurrentMemMap->MapElem == NULL)
+				if (CurrentMemMap->MapElem->Size >= size)
 				{
-					//__magic();
-					//printf("Current is NULL\n");
-					AvailableBlocks[unusedBlockIndex].MapElem->IsFree = FALSE;
-					AvailableBlocks[unusedBlockIndex].MapElem->Address = PageAlloc(roundUp(size / PAGE_SIZE));
-					AvailableBlocks[unusedBlockIndex].MapElem->Size = size;
-					//CurrentMemMap->Prev = ListBegin(FreeBlocks)->Prev;
-					//CurrentMemMap->Next = ListBegin(FreeBlocks);
-					//ListBegin(FreeBlocks)->Prev->Next = CurrentMemMap;
-					//ListBegin(FreeBlocks)->Prev = CurrentMemMap;
-					CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
-					unusedBlockIndex++;
-					printf("Insert occupied %x\n", CurrentMemMap);
-					ListInsert(ListEnd(&OccupiedBlocks), CurrentMemMap);
-					printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
-					addr = CurrentMemMap->MapElem->Address;
-					occupiedBlocks++;
-
-					if (roundUp(size / PAGE_SIZE) * PAGE_SIZE - size > 0)
-					{
-						AvailableBlocks[unusedBlockIndex].MapElem->IsFree = TRUE;
-						AvailableBlocks[unusedBlockIndex].MapElem->Address = CurrentMemMap->MapElem->Address + size;
-						AvailableBlocks[unusedBlockIndex].MapElem->Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
-						CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
-						unusedBlockIndex++;
-						printf("Insert free %x\n", CurrentMemMap);
-						ListInsert(ListEnd(&FreeBlocks), CurrentMemMap);
-						printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
-						freeBlocks++;
-					}
-					//break;
-					return addr;
-				}
-				else*/ if (CurrentMemMap->MapElem->Size >= size)
-				{
-					//__magic();
-					//printf("Size: %d >= %d\n", CurrentMemMap->MapElem->Size, size);
 					QWORD* newAddr = CurrentMemMap->MapElem->Address;
 					AvailableBlock = GetFirstAvailable();
 					AvailableBlock->MapElem->IsFree = FALSE;
@@ -462,74 +373,35 @@ QWORD* MemBlockAlloc(int size)
 					CurrentMemMap->MapElem->Address += size;
 					CurrentMemMap->MapElem->Size -= size;
 					CurrentMemMap = AvailableBlock;
-					//AvailableBlocks[unusedBlockIndex].MapElem->IsFree = FALSE;
-					//AvailableBlocks[unusedBlockIndex].MapElem->Address = newAddr;
-					//AvailableBlocks[unusedBlockIndex].MapElem->Size = size;
-					//CurrentMemMap->MapElem->Address += size;
-					////printf("Size: %d\n", CurrentMemMap->MapElem->Size);
-					//CurrentMemMap->MapElem->Size -= size;
-					////printf("Size: %d\n", CurrentMemMap->MapElem->Size);
-					//CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
 					unusedBlockIndex++;
-					printf("Insert occupied %x\n", CurrentMemMap);
-					//ListInsert(ListEnd(&OccupiedBlocks), CurrentMemMap);
 					ListInsertOrdered(&OccupiedBlocks, CurrentMemMap);
-					printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
 					addr = CurrentMemMap->MapElem->Address;
 					occupiedBlocks++;
-					//break;
 					return addr;
-				}
-				//__magic();
-				else
-				{
-					//TODO:
 				}
 				CurrentMemMap = CurrentMemMap->Next;
 			}
-			/*if (CurrentMemMap->MapElem == NULL)*/
 			{
-				//__magic();
-				//printf("Current is NULL\n");
 				CurrentMemMap = GetFirstAvailable();
 				CurrentMemMap->MapElem->IsFree = FALSE;
-				CurrentMemMap->MapElem->Address = PageAlloc(roundUp(size / PAGE_SIZE));
+				CurrentMemMap->MapElem->Address = PageAlloc(roundUp((double)size / (double)PAGE_SIZE));
 				CurrentMemMap->MapElem->Size = size;
-				//AvailableBlocks[unusedBlockIndex].MapElem->IsFree = FALSE;
-				//AvailableBlocks[unusedBlockIndex].MapElem->Address = PageAlloc(roundUp(size / PAGE_SIZE));
-				//AvailableBlocks[unusedBlockIndex].MapElem->Size = size;
-				////CurrentMemMap->Prev = ListBegin(FreeBlocks)->Prev;
-				////CurrentMemMap->Next = ListBegin(FreeBlocks);
-				////ListBegin(FreeBlocks)->Prev->Next = CurrentMemMap;
-				////ListBegin(FreeBlocks)->Prev = CurrentMemMap;
-				//CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
 				unusedBlockIndex++;
-				printf("Insert occupied %x\n", CurrentMemMap);
-				//ListInsert(ListEnd(&OccupiedBlocks), CurrentMemMap);
 				ListInsertOrdered(&OccupiedBlocks, CurrentMemMap);
-				printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
 				addr = CurrentMemMap->MapElem->Address;
 				occupiedBlocks++;
 
-				if (roundUp(size / PAGE_SIZE) * PAGE_SIZE - size > 0)
+				if (roundUp((double)size / (double)PAGE_SIZE) * PAGE_SIZE - size > 0)
 				{
 					AvailableBlock = GetFirstAvailable();
 					AvailableBlock->MapElem->IsFree = TRUE;
 					AvailableBlock->MapElem->Address = CurrentMemMap->MapElem->Address + size;
-					AvailableBlock->MapElem->Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
+					AvailableBlock->MapElem->Size = roundUp((double)size / (double)PAGE_SIZE) * PAGE_SIZE - size;
 					CurrentMemMap = AvailableBlock;
-					//AvailableBlocks[unusedBlockIndex].MapElem->IsFree = TRUE;
-					//AvailableBlocks[unusedBlockIndex].MapElem->Address = CurrentMemMap->MapElem->Address + size;
-					//AvailableBlocks[unusedBlockIndex].MapElem->Size = roundUp(size / PAGE_SIZE) * PAGE_SIZE - size;
-					//CurrentMemMap = &AvailableBlocks[unusedBlockIndex];
 					unusedBlockIndex++;
-					printf("Insert free %x\n", CurrentMemMap);
-					//ListInsert(ListEnd(&FreeBlocks), CurrentMemMap);
 					ListInsertOrdered(&FreeBlocks, CurrentMemMap);
-					printf("Next: %x, Prev: %x\n", CurrentMemMap->Next, CurrentMemMap->Prev);
 					freeBlocks++;
 				}
-				//break;
 				return addr;
 			}
 		}
@@ -556,7 +428,6 @@ void MemBlockFree(QWORD* address)
 
 	CurrentMemMap = ListBegin(&OccupiedBlocks);
 	while (CurrentMemMap != OccTail)
-	//for (CurrentMemMap = ListBegin(&OccupiedBlocks); CurrentMemMap != ListEnd(&OccupiedBlocks); CurrentMemMap = CurrentMemMap->Next)
 	{
 		if (AddressInsideBlock(address, CurrentMemMap))
 		{
