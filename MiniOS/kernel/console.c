@@ -5,15 +5,16 @@
 #include "chars.h"
 #include "rtc.h"
 #include "ata.h"
+#include "memory.h"
 
-#define NUMBER_OF_EXEC	5
+#define NUMBER_OF_EXEC	10
 
 //static int CurrentPos = 0;
 char consoleString[MAX_CONSOLE_CHARS] = { 0 };
 char auxString[MAX_CONSOLE_CHARS] = { 0 };
 char prompt[] = "@root: ";
 char com[20] = { 0 };
-char args[5][20] = { 0 };
+char args[7][20] = { 0 };
 
 static CONSOLE console;
 static DATE d;
@@ -21,11 +22,16 @@ static QWORD time;
 
 static EXEC_STRUCT execs[] =
 {
-	{"echo",		{ 0 }},
-	{"get_time",	{"-c", "", "", "", ""}},
-	{"get_date",	{"-c", "", "", "", ""}},
-	{"sleep",		{"-m", "-s", "", ""}},
-	{"disk",		{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize"}}
+	{"echo",		{"", "", "", "", "", "", "-h"}},
+	{"get_time",	{"-c", "", "", "", "", "", "-h"}},
+	{"get_date",	{"-c", "", "", "", "", "", "-h"}},
+	{"sleep",		{"-m", "-s", "", "", "", "-h"}},
+	{"disk",		{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize", "-h"}},
+	{"mem",			{"-alloc", "-free", "-p", "-b", "", "", "-h"}},
+	{"div-zero",	{"", "", "", "", "", "", "-h"}},
+	{"page-fault",	{"", "", "", "", "", "", "-h"}},
+	{"clear",		{"", "", "", "", "", "", "-h"}},
+	{"test-memory",	{"", "", "", "", "", "", "-h"}},
 };
 
 
@@ -300,18 +306,37 @@ void ExecuteConsole()
 			{
 			case ECHO:
 			{
+				if ((console.Ccommand->argc == 1) && 
+					(!strcmp(console.Ccommand->args[0], execs[ECHO].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   echo [STRING]");
+					break;
+				}
+				// Echo
 				sprintf(console.Ccommand->response, "%s", console.Ccommand->commandString + strlen(commands[ECHO]) + 1);
 				printf("%s", console.Ccommand->response);
 				break;
 			}
 			case GET_TIME:
 			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[GET_TIME].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   get_time      # without arguments and returns current time\n");
+					printf("   get_time -c   # show current time in continous mode\n");
+					break;
+				}
 				if (console.Ccommand->argc > 0)
 				{
 					if (!strcmp(console.Ccommand->args[0], execs[GET_TIME].args[0]))
 					{
 						while (console.StateMachine == EXECUTE_COMMAND)
 						{
+							// Get Current Time in continous mode	"-c"
 							pos = GetCursorPosition();
 							time = SysGetTime();
 							sprintf(console.Ccommand->response, "%d", time);
@@ -323,6 +348,7 @@ void ExecuteConsole()
 				}
 				else
 				{
+					// Get Current Time
 					time = SysGetTime();
 					sprintf(console.Ccommand->response, "%d", time);
 					printf("%s", console.Ccommand->response);
@@ -331,11 +357,21 @@ void ExecuteConsole()
 			}
 			case GET_DATE:
 			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[GET_DATE].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   get_date      # without arguments and returns current date\n");
+					printf("   get_date -c   # show current date in continous mode\n");
+					break;
+				}
 				//d.year = d.month = d.day = d.hour = d.minute = d.second = 0;
 				if (console.Ccommand->argc > 0)
 				{
 					if (!strcmp(console.Ccommand->args[0], execs[GET_TIME].args[0]))
 					{
+						// Get current date contonously		"-c"
 						while (console.StateMachine == EXECUTE_COMMAND)
 						{
 							pos = GetCursorPosition();
@@ -349,6 +385,7 @@ void ExecuteConsole()
 				}
 				else
 				{
+					// Get current date
 					SysGetDate(&d);
 					sprintf(console.Ccommand->response, "%d/%d/%d %d:%d:%d", d.year, d.month, d.day, d.hour, d.minute, d.second);
 					printf("%s", console.Ccommand->response);
@@ -357,10 +394,20 @@ void ExecuteConsole()
 			}
 			case SLEEP:
 			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[SLEEP].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   sleep -m [MILLISECONDS]  # Sleeps for MILLISECONDS milliseconds\n");
+					printf("   sleep -s [SECONDS]       # Sleeps for SECONDS seconds\n");
+					break;
+				}
 				if (console.Ccommand->argc == 2)
 				{
 					if (!strcmp(console.Ccommand->args[0], execs[SLEEP].args[0]))
 					{
+						// Sleep for milliseconds	"-m"
 						QWORD time = convertToULong(console.Ccommand->args[1]);
 						mSleep(time);
 						break;
@@ -368,14 +415,26 @@ void ExecuteConsole()
 					else
 					if (!strcmp(console.Ccommand->args[0], execs[SLEEP].args[1]))
 					{
+						// Sleep for seconds	"-s"
 						QWORD time = convertToULong(console.Ccommand->args[1]);
 						Sleep(time * 1000);
 						break;
 					}
 				}
+				break;
 			}
 			case DISK:
 			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[DISK].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   disk -r [SECTORS] [LBA] [BUFFER] [BUF_SIZE] # read SECTORS sectors starting from LBA intro BUFFER address\n");
+					printf("   disk -w [SECTORS] [LBA] [BUFFER] {BUF_SIZE] # write SECTORS sectors starting from LBA from BUFFER address\n");	
+					break;
+				}
+				/* {"disk",		{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize", "-h"}} */
 				if (console.Ccommand->argc != 5)
 				{
 					printf("Not enough arguments, %d \n", console.Ccommand->argc);
@@ -383,9 +442,11 @@ void ExecuteConsole()
 				}
 				if (!strcmp(console.Ccommand->args[0], execs[DISK].args[0]))
 				{
+					// Disk read sectors	"-r"
 					BYTE sectors = convertToByte(console.Ccommand->args[1]);
 					unsigned int lba = convertToUInt(console.Ccommand->args[2]);
-					QWORD bufferAddr = convertToQWord(console.Ccommand->args[3]);
+					/*QWORD bufferAddr = convertToQWord(console.Ccommand->args[3]);*/
+					QWORD bufferAddr = converHexToQWORD(console.Ccommand->args[3]);
 					WORD* buffer = bufferAddr;
 					printf("bufferAddr: %x\n", buffer);
 					unsigned int bufferSize = convertToUInt(console.Ccommand->args[4]);
@@ -394,6 +455,7 @@ void ExecuteConsole()
 				}
 				if (!strcmp(console.Ccommand->args[0], execs[DISK].args[1]))
 				{
+					// Disk write sectors	"-w"
 					BYTE sectors = convertToByte(console.Ccommand->args[1]);
 					unsigned int lba = convertToUInt(console.Ccommand->args[2]);
 					QWORD bufferAddr = convertToQWord(console.Ccommand->args[3]);
@@ -403,10 +465,190 @@ void ExecuteConsole()
 					ide_write_sectors(0, sectors, lba, buffer, bufferSize);
 					break;
 				}
+				break;
+			}
+			case MEMORY:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[MEMORY].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   mem -alloc -p [PAGES]  # Allocate PAGES pages. Returns pointer to space.\n");
+					printf("   mem -alloc -b [SIZE]   # Allocate a block of SIZE dimension. Returns pointer to space.\n");
+					printf("   mem -free -p [PAGE]    # Frees page with number PAGE.\n");
+					printf("   mem -free -b [ADDRESS] # Frees the block in which the address is found.\n");
+					break;
+				}
+				/* {"mem",			{"-alloc", "-free", "-p", "-b", "", "", "-h"}}, */
+				if (console.Ccommand->argc != 3)
+				{
+					printf("Not enough arguments, %d \n", console.Ccommand->argc);
+					break;
+				}
+				if (!strcmp(console.Ccommand->args[0], execs[MEMORY].args[0]))
+				{
+					// Allocate memory
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[2]))
+					{
+						// Alloc pages
+						int numberOfPages = convertToUInt(console.Ccommand->args[2]);
+						QWORD* ref = PageAlloc(numberOfPages);
+						if (NULL == ref)
+						{
+							printf("No page allocated\n");
+							break;
+						}
+						printf("%d pages allocated. First page begins at address: %x.\n", numberOfPages, ref);
+						break;
+					}
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[3]))
+					{
+						// Alloc blocks
+						int size = convertToUInt(console.Ccommand->args[2]);
+						QWORD* ref = MemBlockAlloc(size);
+						if (NULL == ref)
+						{
+							printf("Can not allocate a block of size: %d.\n", size);
+							break;
+						}
+						printf("%dB allocated at %x.\n", size, ref);
+						break;
+					}
+					break;
+				}
+				if (!strcmp(console.Ccommand->args[0], execs[MEMORY].args[1]))
+				{
+					// Free memory
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[2]))
+					{
+						// Free page
+						int pageNumber = convertToUInt(console.Ccommand->args[2]);
+						PageFree(pageNumber);
+						printf("Page %d freed\n", pageNumber);
+						break;
+					}
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[3]))
+					{
+						// Free blocks
+						QWORD* addr;
+						addr = converHexToQWORD(console.Ccommand->args[2]);
+						printf("Address %x\n", addr);
+						MemBlockFree(addr);
+						break;
+					}
+					break;
+				}
+				break;
+			}
+			case ZERO_DIV:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[ZERO_DIV].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   div-zero  # Divide a number with zero and rise an exception.\n");
+					break;
+				}
+				int a = divideByZero(0);
+				printf("res %d\n", a);
+				break;
+			}
+			case PAGE_FAULT:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[PAGE_FAULT].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   page-fault  # Access an address that is not mapped and rise an exception.\n");
+					break;
+				}
+				int* a;
+				a = 0x2000000;
+				(*a)++;
+				printf("%x\n", *a);
+				break;
+			}
+			case CLEAR_SCREEN:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[CLEAR_SCREEN].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   clear  # Clear screen.\n");
+					break;
+				}
+				ClearScreen();
+				break;
+			}
+			case TEST_MEMORY:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[TEST_MEMORY].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   test-memory  # Execute a memory test. In the test 4 blocks of memory will be allocated:\n    b0: size: 1    B\n    b1: size: 10   B\n    b2: size: 4200 B\n    b3: size: 1000 B\n The value at location b2 + 10 will be moddified to 10 and then all the blocks will be freed.\n");
+					break;
+				}
+				printf("Alloc block of size 1: ->  ");
+				QWORD* address0 = MemBlockAlloc(1);
+				if (address0 != NULL)
+					printf("Memory Address = %x\n", address0);
+				else
+					printf("NULL\n");
+
+				printf("Alloc block of size 10: ->  ");
+				QWORD* address1 = MemBlockAlloc(10);
+				if (address1 != NULL)
+					printf("Memory Address = %x\n", address1);
+				else
+					printf("NULL\n");
+
+				printf("Alloc block of size 4200: ->  ");
+				QWORD* address2 = MemBlockAlloc(4200);
+				if (address2 != NULL)
+					printf("Memory Address = %x\n", address2);
+				else
+					printf("NULL\n");
+
+				printf("Acccess address in last block: %x\n", address2 + 10);
+				printf("  -> Value before: %d\n", (int)(*(address2 + 10)));
+				(int)(*(address2 + 10)) = 10;
+				printf("  -> Value after: %d\n", (int)(*(address2 + 10)));
+
+				printf("Alloc block of size 1000: ->  ");
+				QWORD* address3 = MemBlockAlloc(1000);
+				if (address3 != NULL)
+					printf("Memory Address = %x\n", address3);
+				else
+					printf("NULL\n");
+				
+				//printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+				printf("free %x\n", address2);
+				MemBlockFree(address2);
+				//printf("BitMap[0] after free: %x, addr: %x\n", address2, (BitMap.bits[0]));
+				printf("free %x\n", address1);
+				MemBlockFree(address1);
+				//printf("BitMap[0] after free: %x, addr: %x\n", address1, (BitMap.bits[0]));
+				printf("free %x\n", address0);
+				MemBlockFree(address0);
+				//printf("BitMap[0] after free: %x, addr: %x\n", address0, (BitMap.bits[0]));
+				printf("free %x\n", address3);
+				MemBlockFree(address3);
+				break;
 			}
 			default:
 			{
 				printf("Command \"%s\" not found.", console.Ccommand->command);
+				printf("Available commands:\n    ");
+				for (i = 0; i < NUMBER_OF_EXEC; i++)
+				{
+					printf("%s\n    ", execs[i].name);
+				}
 				break;
 			}
 			}
@@ -468,7 +710,7 @@ void processCommand(COMMAND_STRUCT* cmd)
 			x++;
 			j++;
 		}
-		cmd->args[cmd->argc][j - x] = 0;
+		cmd->args[cmd->argc][x] = 0;
 		cmd->argc++;
 	}
 }
@@ -489,4 +731,13 @@ void CommandToScreen(COMMAND_STRUCT* cmd)
 	SetColor(console.Color);
 	PutString(cmd->commandString);
 	CursorPosition(GetCursorPosition() - (cmd->EndPos - cmd->CurrentPos));
+}
+
+int divideByZero(int param)
+{
+	int n;
+	n = 10 / param;
+	//printf("Div  0 = %d\n", 10 / param);
+	//return param;
+	return n;
 }

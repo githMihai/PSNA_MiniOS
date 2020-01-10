@@ -44,5 +44,6 @@ void __ERQ8(void);
 void __ERQ14(void);
 WORD __get_intr_flags();
 void __set_intr_flags(QWORD flags);
+QWORD __esp();
 
 #endif // _MAIN_H_

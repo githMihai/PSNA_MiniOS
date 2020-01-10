@@ -2,6 +2,7 @@
 #define _MEMORY_H_
 
 #define MEMORY_MAP_ADDRESS	0x600000
+#define PT_3_ADDR			0x407000
 
 #define FRAME_SIZE		4096
 #define PAGE_SIZE		4096

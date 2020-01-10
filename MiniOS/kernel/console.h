@@ -10,11 +10,16 @@
 #pragma pack(1)
 typedef enum _COMMANDS
 {
-	ECHO		= 0,
-	GET_TIME	= 1,
-	GET_DATE	= 2,
-	SLEEP		= 3,
-	DISK		= 4,
+	ECHO			= 0,
+	GET_TIME		= 1,
+	GET_DATE		= 2,
+	SLEEP			= 3,
+	DISK			= 4,
+	MEMORY			= 5,
+	ZERO_DIV		= 6,
+	PAGE_FAULT		= 7,
+	CLEAR_SCREEN	= 8,
+	TEST_MEMORY		= 9,
 }COMMANDS;
 
 typedef enum _WAITING_COMMAND_STATE_MACHINE
@@ -43,7 +48,7 @@ typedef struct _COMMAND_STRUCT
 	char commandString[255];
 	char response[1000];
 	char command[20];
-	char args[6][20];
+	char args[7][20];
 	int argc;
 	int length;
 	int CurrentPos;
@@ -55,7 +60,7 @@ typedef struct _COMMAND_STRUCT
 typedef struct _EXEC_STRUCT
 {
 	char name[20];
-	char args[6][20];
+	char args[7][20];
 }EXEC_STRUCT;
 
 typedef struct _CONSOLE
@@ -103,5 +108,7 @@ void CommandToScreen(COMMAND_STRUCT* cmd);
 void WriteIntoComand(char c, COMMAND_STRUCT* cmd);
 
 void ExecuteConsole();
+
+int divideByZero(int param);
 
 #endif // _CONSOLE_H_

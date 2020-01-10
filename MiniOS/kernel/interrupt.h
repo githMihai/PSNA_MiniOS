@@ -39,6 +39,16 @@ struct IDTDescr64
 	DWORD	offset_1;	/* 63..32 */
 	DWORD	reserved;
 };
+
+typedef struct _TRAP_FRAME
+{
+	QWORD	error;
+	QWORD	rip;
+	QWORD	cs;
+	QWORD	eflags;
+	QWORD	esp;
+	QWORD	ss;
+}TRAP_FRAME;
 #pragma pack(pop)
 
 void IRQ_set_mask(unsigned char IRQline);
@@ -49,6 +59,7 @@ void InitIDT();
 WORD GetIntFlags();
 WORD GetIntLevel();
 void SetInt(WORD intLvl);
+void PrintTrapFrame(TRAP_FRAME* Trap);
 
 void IRQ0_handler();
 void IRQ1_handler();

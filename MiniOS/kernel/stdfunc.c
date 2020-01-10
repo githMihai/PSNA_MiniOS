@@ -60,7 +60,7 @@ int sprintf(char* dst, const char* format, ...)
 	char* traverse;
 	unsigned int c;
 	char* s;
-	int i;
+	int i, j;
 
 	va_list arg;
 	va_start(arg, format);
@@ -274,6 +274,26 @@ QWORD convertToQWord(char* str)
 		}
 	}
 	return number;
+}
+
+QWORD converHexToQWORD(char* str)
+{
+	int i;
+	int length = strlen(str);
+	QWORD val = 0;
+	str++;
+	str++;
+	while (*str) {
+		// get current character then increment
+		BYTE byte = *str++;
+		// transform hex character to the 4bit equivalent number, using the ascii table indexes
+		if (byte >= '0' && byte <= '9') byte = byte - '0';
+		else if (byte >= 'a' && byte <= 'f') byte = byte - 'a' + 10;
+		else if (byte >= 'A' && byte <= 'F') byte = byte - 'A' + 10;
+		// shift 4 to make space for new digit, and add the 4 bits of the new digit 
+		val = (val << 4) | (byte & 0xF);
+	}
+	return val;
 }
 
 int roundUp(double number)

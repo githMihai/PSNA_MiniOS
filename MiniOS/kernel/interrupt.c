@@ -297,6 +297,12 @@ void IRQ9_handler()
 
 void ERQ0_handler()
 {
+	TRAP_FRAME* t;
+	t = (TRAP_FRAME*)(__trap_esp()+(QWORD)8);
+	t->error = 0;
+	/*printf("esp = %d\n", t);
+	printf("rip: %d, cs: %d, eflags: %x, esp: %d, ss: %d\n", t->rip, t->cs, t->eflags, t->esp, t->ss);*/
+	PrintTrapFrame(t);
 	debugPrint("Division By zero", 17);
 	__cli();
 	__hlt();
@@ -314,5 +320,25 @@ void ERQ8_handler()
 
 void ERQ14_handler()
 {
+	TRAP_FRAME* t;
+	t = (TRAP_FRAME*)(__trap_esp()+(QWORD)16);
+	/*printf("esp = %d\n", t);
+	printf("rip: %d, cs: %d, eflags: %x, esp: %d, ss: %d\n", t->rip, t->cs, t->eflags, t->esp, t->ss);*/
+	PrintTrapFrame(t);
 	debugPrint("Page Fault", 10);
+	__cli();
+	__hlt();
+}
+
+void PrintTrapFrame(TRAP_FRAME* Trap)
+{
+	printf("+------ TRAP FRAME ---------+ \n\
+|    error:  %d \n\
+|    rip:    %x \n\
+|    cs:     %d \n\
+|    eflags: %x \n\
+|    esp:    %x \n\
+|    ss:     %d \n\
++---------------------------+ \n",
+		Trap->error, Trap->rip, Trap->cs, Trap->eflags, Trap->esp, Trap->ss);
 }

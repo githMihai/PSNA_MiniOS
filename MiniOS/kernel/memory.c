@@ -109,6 +109,10 @@ QWORD* PageAlloc(int numberOfPages)
 {
 	int i;
 	BYTE mask;
+	if (numberOfPages == 0)
+	{
+		return NULL;
+	}
 	if (numberOfPages == 1)
 	{
 		int pageNumber = GetFirstFreePageNumber();
@@ -118,6 +122,7 @@ QWORD* PageAlloc(int numberOfPages)
 		if (pageNumber >= 0)
 		{
 			BitMap.bits[bitmapIndex] |= mask;
+			*((QWORD*)PT_3_ADDR + pageNumber) |= 1;
 			return MEMORY_MAP_ADDRESS + (QWORD)(pageNumber * FRAME_SIZE);
 		}
 	}
@@ -127,11 +132,13 @@ QWORD* PageAlloc(int numberOfPages)
 		int bitmapIndex = pageNumber / BITS_8;
 		int bitIndex = pageNumber % BITS_8;
 		int pagesCounter = 0;
+		int idx = pageNumber;
 		if (pageNumber >= 0)
 		{
 			while ((pagesCounter < numberOfPages))
 			{
 				mask = (BYTE)1U << (BITS_8 - 1 - (bitIndex % BITS_8));
+				*((QWORD*)PT_3_ADDR + idx) |= 1;
 				BitMap.bits[bitmapIndex] |= mask;
 				if (bitIndex < 7)
 				{
@@ -143,6 +150,7 @@ QWORD* PageAlloc(int numberOfPages)
 					bitIndex = 0;
 				}
 				pagesCounter++;
+				idx++;
 			}
 			if (pagesCounter == numberOfPages)
 			{
@@ -157,6 +165,7 @@ QWORD* PageAlloc(int numberOfPages)
 void PageFree(QWORD page)
 {
 	QWORD bitmapIndex = (QWORD)page / BITS_8;
+	*((QWORD*)PT_3_ADDR + page) &= ~(1U);
 	BitMap.bits[bitmapIndex] &= ~(1U << 7 - (((QWORD)page % BITS_8)));
 }
 
@@ -436,6 +445,7 @@ void MemBlockFree(QWORD* address)
 			ListRemove(DisposableBlock);
 			DisposableBlock->MapElem->IsFree = TRUE;
 			ListInsertOrdered(&FreeBlocks, DisposableBlock);
+			printf("Block form: %x with size: %d is free.\n", DisposableBlock->MapElem->Address, DisposableBlock->MapElem->Size);
 			CompactFreeBlocks();
 			continue;
 		}

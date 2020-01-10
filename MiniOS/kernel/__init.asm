@@ -37,9 +37,10 @@ PDE_ADDR                    equ 0x403000
 PT_0_ADDR                   equ 0x404000
 PT_1_ADDR                   equ 0x405000
 PT_2_ADDR                   equ 0x406000
-PT_3_ADDR                   equ 0x409000
+PT_3_ADDR                   equ 0x407000
 PAGE_SIZE                   equ 0x1000  ;4KB
 
+READ_WRITE                  equ 0x2
 READ_WRITE_PRESENT          equ 0x3
 PAGE_ADDRESS_EXTENSION      equ 0b100000
 PT_SIZE                     equ 512
@@ -98,6 +99,10 @@ call __enableSSE
         or eax, READ_WRITE_PRESENT      ; Set the bits for read/write and present.
         mov [PDE_ADDR+2*PTE_SIZE], eax  ; Make the entry 0 into the Page Directory table to point to third Page Table.
 
+		mov QWORD eax, PT_3_ADDR        ; Put the forth Page Table address into eax.
+        or eax, READ_WRITE_PRESENT      ; Set the bits for read/write and present.
+        mov [PDE_ADDR+3*PTE_SIZE], eax  ; Make the entry 0 into the Page Directory table to point to third Page Table.
+
     ; First Page Table
     PT_0:
         xor eax, eax          ; Set eax to 0 because we want to begin identity mapping form the fist address in memory wich will probably be a location in stack.
@@ -133,10 +138,11 @@ call __enableSSE
             loop .loop_2
     ; Forth Page Table
     PT_3:
-        mov edi, PT_3_ADDR  ; Set the destination index register to point to fist entry in PT_2.
+        mov edi, PT_3_ADDR  ; Set the destination index register to point to fist entry in PT_3.
         mov ecx, PT_SIZE    ; Set the count register to 512 (number of entries in a bage table).
+        sub eax, 3
         .loop_3:
-            or eax, READ_WRITE_PRESENT  ; Set all pages form the Page Table to be readable/writable and present.
+            or eax, READ_WRITE          ; Set all pages form the Page Table to be readable/writable and present.
             mov DWORD [edi], eax        ; Put the physical address of the page into the coresponding entry in Page Table.
             add eax, PAGE_SIZE          ; Compute the physical address of the next page.
             add edi, PTE_SIZE           ; Increase the destiantion index into the page table.
@@ -355,7 +361,14 @@ __setPAE:
     mov CR4, RCX
     ret
 
+; FAST_CALL convention
+; return: RAX
+__trap_esp:
+	[bits 64]
+	mov RAX, RSP
+	add RAX, 0x80
+	ret
 
-EXPORT2C ASMEntryPoint, __cli, __sti, __magic, __enableSSE, __get_intr_flags, __set_intr_flags, __IRQ0, __IRQ1, __IRQ2, __IRQ3, __IRQ4, __IRQ5, __IRQ6, __IRQ7, __IRQ8, __IRQ9, __ERQ0, __ERQ5, __ERQ8, __ERQ14, __hlt
+EXPORT2C ASMEntryPoint, __cli, __sti, __magic, __enableSSE, __get_intr_flags, __set_intr_flags, __IRQ0, __IRQ1, __IRQ2, __IRQ3, __IRQ4, __IRQ5, __IRQ6, __IRQ7, __IRQ8, __IRQ9, __ERQ0, __ERQ5, __ERQ8, __ERQ14, __hlt, __trap_esp
 
 
