@@ -4,6 +4,8 @@
 
 BYTE ata_buffer[256];
 
+/* arguments:	First drive port base, first drive control base
+				Second drive port base, second drive control base */
 void ide_initialize(DWORD BAR0, DWORD BAR1, DWORD BAR2, DWORD BAR3, DWORD BAR4)
 {
 	int i, j, k, count = 0;
@@ -97,26 +99,6 @@ void ide_initialize(DWORD BAR0, DWORD BAR1, DWORD BAR2, DWORD BAR3, DWORD BAR4)
 			{
 				printf(" CHS mode\n");
 			}
-			//printf("ModelNumber: %s\n", ide_devices[i].IdentifyData.ModelNumber);
-
-			//printf("IdentifyData: %d\n", &ide_devices[i].IdentifyData);
-			//printf("GeneralConfiguration: %d\n", &ide_devices[i].IdentifyData.GeneralConfiguration);
-			//printf("NumCylinders: %d\n", &ide_devices[i].IdentifyData.NumCylinders);
-			//printf("SpecificConfiguration: %d\n", &ide_devices[i].IdentifyData.SpecificConfiguration);
-			//printf("NumHeads: %d\n", &ide_devices[i].IdentifyData.NumHeads);
-			//printf("Retired1[2]: %d\n", &ide_devices[i].IdentifyData.Retired1);
-			//printf("NumSectorsPerTrack: %d\n", &ide_devices[i].IdentifyData.NumSectorsPerTrack);
-			//printf("VendorUnique1[3]: %d\n", &ide_devices[i].IdentifyData.VendorUnique1);
-			//printf("BYTE SerialNumber[20]: %d\n", &ide_devices[i].IdentifyData.SerialNumber);
-			//printf("Retired2[2]: %d\n", &ide_devices[i].IdentifyData.Retired2);
-			//printf("Obsolete1: %d\n", &ide_devices[i].IdentifyData.Obsolete1);
-			//printf("BYTE FirmwareRevision[8]: %d\n", &ide_devices[i].IdentifyData.FirmwareRevision);
-			//printf("BYTE ModelNumber[40]: %d\n", &ide_devices[i].IdentifyData.ModelNumber);
-			//printf("VendorUnique2: %d\n", &ide_devices[i].IdentifyData.VendorUnique2);
-			//printf("TrustedComputing: %d\n", &ide_devices[i].IdentifyData.TrustedComputing);
-			//printf("Capabilities: %d\n", &ide_devices[i].IdentifyData.Capabilities);
-			//printf("BYTE CurrentMultiSectorSetting: %d\n", &ide_devices[i].IdentifyData.CurrentMultiSectorSetting);
-			//printf("ReservedForExpandedSupportandActive: %d\n", &ide_devices[i].IdentifyData.ReservedForExpandedSupportandActive);
 			printf("DMA: %d\n", ide_devices[i].IdentifyData.Capabilities.DmaSupported);
 		}
 	}
@@ -203,32 +185,6 @@ BOOLEAN ATAIdentify(BYTE channel, BYTE Type)
 	int i;
 	type = IDE_ATA;
 
-	/*__outbyte(DriveBase + ATA_REG_HDDEVSEL, Type);
-	__outbyte(DriveBase + ATA_REG_SECCOUNT0, 0);
-	__outbyte(DriveBase + ATA_REG_LBA0, 0);
-	__outbyte(DriveBase + ATA_REG_LBA1, 0);
-	__outbyte(DriveBase + ATA_REG_LBA2, 0);
-	__outbyte(DriveBase + ATA_REG_COMMAND, ATA_CMD_IDENTIFY);
-	mSleep(10);
-	status = __inbyte(DriveBase + ATA_REG_STATUS);
-	if (status == 0)
-	{
-		printf("Drive does not exist\n");
-		return;
-	}
-	while ((status = __inbyte(DriveBase + ATA_REG_STATUS)) & ATA_SR_BSY)
-	{
-		mSleep(10);
-	}
-	if ((__inbyte(DriveBase + ATA_REG_LBA1) | __inbyte(DriveBase + ATA_REG_LBA2)))
-	{
-		printf("Drive is not ATA\n");
-		return;
-	}
-	while (((status = __inbyte(DriveBase + ATA_REG_STATUS)) & (ATA_SR_DRQ | ATA_SR_ERR)) == 0)
-	{
-		mSleep(10);
-	}*/
 	// (I) Select Drive:
 	ide_write(channel, ATA_REG_HDDEVSEL, Type);
 
@@ -251,11 +207,6 @@ BOOLEAN ATAIdentify(BYTE channel, BYTE Type)
 	{
 		mSleep(10);
 	}
-	//if ((ide_read(channel, ATA_REG_LBA1) | ide_read(channel, ATA_REG_LBA2)))
-	//{
-	//	printf("Drive is not ATA\n");
-	//	return IDE_NOT_FOUND;
-	//}
 	while (((status = ide_read(channel, ATA_REG_STATUS)) & (ATA_SR_DRQ | ATA_SR_ERR)) == 0)
 	{
 		if (status & ATA_SR_ERR)	
@@ -287,8 +238,6 @@ BOOLEAN ATAIdentify(BYTE channel, BYTE Type)
 	{
 		data =  __indword(channels[channel].base + ATA_REG_DATA);
 		*(((DWORD*)(ata_buffer))+i) = data;
-		/*printf("D + %d: %x\n", i, ata_buffer[i]);
-		__magic();*/
 	}
 
 	return type;
@@ -347,8 +296,6 @@ BYTE ide_ata_access(BYTE direction, BYTE drive, unsigned int lba, BYTE numsects,
 	WORD cyl, i, j, k;
 	BYTE head, sect, err;
 	WORD dat;
-
-	//ide_write(channel, ATA_REG_CONTROL, channels[channel].nIEN = (ide_irq_invoked = 0x0) + 0x02);
 
 	// (I) Select one from LBA28, LBA48 or CHS;
 	if (lba >= 0x10000000) { // Sure Drive should support LBA in this case, or you are
@@ -446,15 +393,9 @@ BYTE ide_ata_access(BYTE direction, BYTE drive, unsigned int lba, BYTE numsects,
 				for (k = 0; k < SECTOR_SIZE/sizeof(WORD); k++)
 				{
 					dat = __inword(channels[channel].base + ATA_REG_DATA);
-					//ide_devices[drive].data[j + i] = dat;
 					buffer[j + k] = dat;
 					nSleep(1);
 				}
-				//asm("pushw %es");
-				//asm("mov %%ax, %%es" : : "a"(selector));
-				//asm("rep insw" : : "c"(words), "d"(bus), "D"(edi)); // Receive Data.
-				//asm("popw %es");
-				//edi += (words * 2);
 				j += SECTOR_SIZE / sizeof(WORD);
 			}
 		}
@@ -469,11 +410,6 @@ BYTE ide_ata_access(BYTE direction, BYTE drive, unsigned int lba, BYTE numsects,
 					__outword(channels[channel].base + ATA_REG_DATA, buffer[j + k]);
 					nSleep(100);
 				}
-				//asm("pushw %ds");
-				//asm("mov %%ax, %%ds"::"a"(selector));
-				//asm("rep outsw"::"c"(words), "d"(bus), "S"(edi)); // Send Data
-				//asm("popw %ds");
-				//edi += (words * 2);
 				j += SECTOR_SIZE / sizeof(WORD);
 			}
 			ide_write(channel, ATA_REG_COMMAND, (char[]) {
@@ -509,9 +445,6 @@ void ide_read_sectors(BYTE drive, BYTE numsects, unsigned int lba,
 		BYTE err;
 		if (ide_devices[drive].Type == IDE_ATA)
 			err = ide_ata_access(ATA_READ, drive, lba, numsects, buffer, bufferSize);
-		//else if (ide_devices[drive].Type == IDE_ATAPI)
-		//	for (int i = 0; i < numsects; i++)
-		//		err = ide_atapi_read(drive, lba + i, 1, es, edi + (i * 2048));
 	}
 }
 
@@ -536,7 +469,5 @@ void ide_write_sectors(BYTE drive, BYTE numsects, unsigned int lba,
 		BYTE err;
 		if (ide_devices[drive].Type == IDE_ATA)
 			err = ide_ata_access(ATA_WRITE, drive, lba, numsects, buffer);
-		//else if (ide_devices[drive].Type == IDE_ATAPI)
-		//	err = 4; // Write-Protected.
 	}
 }

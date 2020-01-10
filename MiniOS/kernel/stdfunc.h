@@ -27,5 +27,6 @@ unsigned int convertToUInt(char* str);
 QWORD convertToQWord(char* str);
 QWORD converHexToQWORD(char* str);
 int roundUp(double number);
+void printBinary(BYTE number);
 
 #endif // _STDFUNC_H_

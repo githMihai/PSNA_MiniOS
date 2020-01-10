@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#define TIMER_FREQ	100
+#define TIMER_FREQ	100		// FRECQUENCY
 
 void TimerInit();
 void TimerInterruptHandler();

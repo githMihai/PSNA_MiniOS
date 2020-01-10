@@ -17,12 +17,6 @@ void TimerInit()
 
 void TimerInterruptHandler()
 {
-	/*if (ticks % 1000000000 == 0)
-	{
-		ClearScreen();
-		printf("ticks = %d\n", counter);
-		counter++;
-	}*/
 	ticks++;
 }
 

@@ -95,6 +95,7 @@ void InitIDT()
 
 	PIC_remap(0x20, 0x28);
 
+	// Division by zero exception
 	exception0_address = (QWORD)__ERQ0;
 	IDT[0].offset_1 = (exception0_address & 0xffffffff00000000) >> 32;
 	IDT[0].offset_2 = (exception0_address & 0x00000000ffff0000) >> 16;
@@ -103,6 +104,7 @@ void InitIDT()
 	IDT[0].selector = 48;
 	IDT[0].offset_3 = (exception0_address & 0xffff);
 
+	// Bound range exceded exception
 	exception5_address = (QWORD)__ERQ5;
 	IDT[5].offset_1 = (exception5_address & 0xffffffff00000000) >> 32;
 	IDT[5].offset_2 = (exception5_address & 0x00000000ffff0000) >> 16;
@@ -111,6 +113,7 @@ void InitIDT()
 	IDT[5].selector = 48;
 	IDT[5].offset_3 = (exception5_address & 0xffff);
 
+	// Double Fault exception
 	exception8_address = (QWORD)__ERQ8;
 	IDT[8].offset_1 = (exception8_address & 0xffffffff00000000) >> 32;
 	IDT[8].offset_2 = (exception8_address & 0x00000000ffff0000) >> 16;
@@ -119,6 +122,7 @@ void InitIDT()
 	IDT[8].selector = 48;
 	IDT[8].offset_3 = (exception8_address & 0xffff);
 
+	// Page Fault exception
 	exception14_address = (QWORD)__ERQ14;
 	IDT[14].offset_1 = (exception14_address & 0xffffffff00000000) >> 32;
 	IDT[14].offset_2 = (exception14_address & 0x00000000ffff0000) >> 16;
@@ -127,6 +131,7 @@ void InitIDT()
 	IDT[14].selector = 48;
 	IDT[14].offset_3 = (exception14_address & 0xffff);
 
+	// Timer interrupt
 	irq0_address = (QWORD)__IRQ0;
 	IDT[32].offset_1 = (irq0_address & 0xffffffff00000000) >> 32;
 	IDT[32].offset_2 = (irq0_address & 0x00000000ffff0000) >> 16;
@@ -135,6 +140,7 @@ void InitIDT()
 	IDT[32].selector = 48;
 	IDT[32].offset_3 = (irq0_address & 0xffff);
 
+	// Keyboard interrupt
 	irq1_address = (QWORD)__IRQ1;
 	IDT[33].offset_1 = (irq1_address & 0xffffffff00000000) >> 32;
 	IDT[33].offset_2 = (irq1_address & 0x00000000ffff0000) >> 16;
@@ -191,6 +197,7 @@ void InitIDT()
 	IDT[39].selector = 48;
 	IDT[39].offset_3 = (irq7_address & 0xffff);
 
+	// RTC interrupt
 	irq8_address = (QWORD)__IRQ8;
 	IDT[40].offset_1 = (irq8_address & 0xffffffff00000000) >> 32;
 	IDT[40].offset_2 = (irq8_address & 0x00000000ffff0000) >> 16;
@@ -295,6 +302,7 @@ void IRQ9_handler()
 	PIC_sendEOI(9);
 }
 
+// DIVISION BY ZERO EXCEPTION
 void ERQ0_handler()
 {
 	TRAP_FRAME* t;
@@ -308,16 +316,19 @@ void ERQ0_handler()
 	__hlt();
 }
 
+// BOUND RANGE EXCEEDED EXCEPTION
 void ERQ5_handler()
 {
 	debugPrint("Bound Range Exceeded", 20);
 }
 
+// DOUBLE FAULT EXCEPTION
 void ERQ8_handler()
 {
 	debugPrint("Double Fault", 12);
 }
 
+// PAGE FAULT EXCEPTION
 void ERQ14_handler()
 {
 	TRAP_FRAME* t;

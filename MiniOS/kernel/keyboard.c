@@ -89,14 +89,7 @@ void KeyboardInterruptHandler()
 				{
 					keyState.key = keycode;
 				}
-				/*PutChar((keycode / 10000 % 10) + '0', GetCursorPosition());
-				PutChar((keycode / 1000 % 10) + '0', GetCursorPosition());
-				PutChar((keycode / 100 % 10) + '0', GetCursorPosition());
-				PutChar((keycode / 10 % 10) + '0', GetCursorPosition());
-				PutChar((keycode % 10) + '0', GetCursorPosition());
-				PutChar(' ', GetCursorPosition());*/
 				copyState = keyState;
-				//PutChar(scancode[keyState.key]);
 				func(copyState);
 			}
 		}

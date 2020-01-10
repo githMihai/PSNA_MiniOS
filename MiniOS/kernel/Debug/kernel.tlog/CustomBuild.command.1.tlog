@@ -1,0 +1,2 @@
+^C:\UTCN_SISC\MINIOS_REPOSITORY\MINIOS\KERNEL\__INIT.ASM
+".\..\utils\nasm" -o "Debug\__init.obj" -f win32 "C:\UTCN_SISC\MiniOS_Repository\MiniOS\kernel\__init.asm"

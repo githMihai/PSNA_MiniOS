@@ -31,12 +31,6 @@ void InitMemory()
 	OccupiedBlocks.Tail.Prev = &OccupiedBlocks.Head;
 	OccupiedBlocks.Tail.Next = NULL;
 	OccupiedBlocks.Head.MapElem = NULL;
-
-	printf("Free Head = %x\n", &FreeBlocks.Head);
-	printf("Free Tail = %x\n", &FreeBlocks.Tail);
-
-	printf("Occ Head = %x\n", &OccupiedBlocks.Head);
-	printf("Occ Tail = %x\n", &OccupiedBlocks.Tail);
 }
 
 int GetFirstFreePageNumber()
@@ -451,4 +445,14 @@ void MemBlockFree(QWORD* address)
 		}
 		CurrentMemMap = CurrentMemMap->Next;
 	}
+}
+
+void PrintBitMap()
+{
+	int i;
+	for (i = 0; i < 64; i++)
+	{
+		printBinary(BitMap.bits[i]);
+	}
+	printf("\n");
 }

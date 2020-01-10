@@ -79,4 +79,6 @@ QWORD* MemBlockAlloc(int size);
 
 void MemBlockFree(QWORD* address);
 
+void PrintBitMap();
+
 #endif // _MEMEORY_H_

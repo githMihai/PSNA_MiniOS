@@ -7,7 +7,7 @@
 #include "ata.h"
 #include "memory.h"
 
-#define NUMBER_OF_EXEC	10
+#define NUMBER_OF_EXEC	12
 
 //static int CurrentPos = 0;
 char consoleString[MAX_CONSOLE_CHARS] = { 0 };
@@ -22,16 +22,18 @@ static QWORD time;
 
 static EXEC_STRUCT execs[] =
 {
-	{"echo",		{"", "", "", "", "", "", "-h"}},
-	{"get_time",	{"-c", "", "", "", "", "", "-h"}},
-	{"get_date",	{"-c", "", "", "", "", "", "-h"}},
-	{"sleep",		{"-m", "-s", "", "", "", "-h"}},
-	{"disk",		{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize", "-h"}},
-	{"mem",			{"-alloc", "-free", "-p", "-b", "", "", "-h"}},
-	{"div-zero",	{"", "", "", "", "", "", "-h"}},
-	{"page-fault",	{"", "", "", "", "", "", "-h"}},
-	{"clear",		{"", "", "", "", "", "", "-h"}},
-	{"test-memory",	{"", "", "", "", "", "", "-h"}},
+	{"echo",			{"", "", "", "", "", "", "-h"}},
+	{"get_time",		{"-c", "", "", "", "", "", "-h"}},
+	{"get_date",		{"-c", "", "", "", "", "", "-h"}},
+	{"sleep",			{"-m", "-s", "", "", "", "-h"}},
+	{"disk",			{"-r", "-w", "-sects", "-lba", "-buf", "-bufSize", "-h"}},
+	{"mem",				{"-alloc", "-free", "-p", "-b", "", "", "-h"}},
+	{"div-zero",		{"", "", "", "", "", "", "-h"}},
+	{"page-fault",		{"", "", "", "", "", "", "-h"}},
+	{"clear",			{"", "", "", "", "", "", "-h"}},
+	{"test-memory",		{"", "", "", "", "", "", "-h"}},
+	{"test-memory-a",	{"", "", "", "", "", "", "-h"}},
+	{"show-memory",		{"", "", "", "", "", "", "-h"}},
 };
 
 
@@ -594,20 +596,22 @@ void ExecuteConsole()
 					printf("   test-memory  # Execute a memory test. In the test 4 blocks of memory will be allocated:\n    b0: size: 1    B\n    b1: size: 10   B\n    b2: size: 4200 B\n    b3: size: 1000 B\n The value at location b2 + 10 will be moddified to 10 and then all the blocks will be freed.\n");
 					break;
 				}
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
 				printf("Alloc block of size 1: ->  ");
 				QWORD* address0 = MemBlockAlloc(1);
 				if (address0 != NULL)
 					printf("Memory Address = %x\n", address0);
 				else
 					printf("NULL\n");
-
 				printf("Alloc block of size 10: ->  ");
 				QWORD* address1 = MemBlockAlloc(10);
 				if (address1 != NULL)
 					printf("Memory Address = %x\n", address1);
 				else
 					printf("NULL\n");
-
 				printf("Alloc block of size 4200: ->  ");
 				QWORD* address2 = MemBlockAlloc(4200);
 				if (address2 != NULL)
@@ -626,7 +630,13 @@ void ExecuteConsole()
 					printf("Memory Address = %x\n", address3);
 				else
 					printf("NULL\n");
-				
+				__magic();
+				ClearScreen();
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
+
 				//printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
 				printf("free %x\n", address2);
 				MemBlockFree(address2);
@@ -639,7 +649,126 @@ void ExecuteConsole()
 				//printf("BitMap[0] after free: %x, addr: %x\n", address0, (BitMap.bits[0]));
 				printf("free %x\n", address3);
 				MemBlockFree(address3);
+				__magic();
+				ClearScreen();
+				printf("Pitmap: ");
+				PrintBitMap();
 				break;
+			}
+			case TEST_MEMORY_A:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[TEST_MEMORY].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   test-memory  # Execute a memory test. In the test 4 pages of memory will be allocated:\n    After eatch allocation, the bitmap will be printed.\n");
+					break;
+				}
+				printf("Alloc one page\n");
+				printf("Pitmap: ");
+				PrintBitMap();
+				QWORD* address0 = PageAlloc(1);
+				if (address0 != NULL)
+					printf("Memory Address = %x\n", address0);
+				else
+					printf("NULL\n");
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
+
+				printf("Alloc 10 pages\n");
+				QWORD* address1 = PageAlloc(10);
+				if (address1 != NULL)
+					printf("Memory Address = %x\n", address1);
+				else
+					printf("NULL\n");
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
+
+				printf("Alloc 100 page\n");
+				printf("Pitmap: ");
+				PrintBitMap();
+				QWORD* address2 = PageAlloc(100);
+				if (address2 != NULL)
+					printf("Memory Address = %x\n", address2);
+				else
+					printf("NULL\n");
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
+
+				//printf("BitMap[0] addr: %x\n", (BitMap.bits[0]));
+				printf("free page %d\n", 1);
+				PageFree(1);
+				printf("Pitmap: ");
+				PrintBitMap();
+				__magic();
+				ClearScreen();
+
+				//printf("BitMap[0] after free: %x, addr: %x\n", address2, (BitMap.bits[0]));
+				printf("free page %d\n", 10);
+				PageFree(10);
+				printf("Pitmap: ");
+				PrintBitMap();
+				break;
+			}
+			case SHOW_MEMORY:
+			{
+				if ((console.Ccommand->argc == 1) &&
+					(!strcmp(console.Ccommand->args[0], execs[TEST_MEMORY].args[6])))
+				{
+					// Help
+					printf("Command usage:\n");
+					printf("   show-memory [ADDRESS] [SIZE] # Prints first SIZE Word elements from memory + ADDRESS.\n");
+					break;
+				}
+				if (console.Ccommand->argc != 2)
+				{
+					printf("Not enough arguments, %d \n", console.Ccommand->argc);
+					break;
+				}
+				{
+					QWORD* address;
+					address = converHexToQWORD(console.Ccommand->args[0]);
+					int size = convertToUInt(console.Ccommand->args[1]);
+					for (i = 0; i < size; i++)
+					{
+						printf("%x, ", *((WORD*)address + i));
+					}
+					// Allocate memory
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[2]))
+					{
+						// Alloc pages
+						int numberOfPages = convertToUInt(console.Ccommand->args[2]);
+						QWORD* ref = PageAlloc(numberOfPages);
+						if (NULL == ref)
+						{
+							printf("No page allocated\n");
+							break;
+						}
+						printf("%d pages allocated. First page begins at address: %x.\n", numberOfPages, ref);
+						break;
+					}
+					if (!strcmp(console.Ccommand->args[1], execs[MEMORY].args[3]))
+					{
+						// Alloc blocks
+						int size = convertToUInt(console.Ccommand->args[2]);
+						QWORD* ref = MemBlockAlloc(size);
+						if (NULL == ref)
+						{
+							printf("Can not allocate a block of size: %d.\n", size);
+							break;
+						}
+						printf("%dB allocated at %x.\n", size, ref);
+						break;
+					}
+					break;
+				}
 			}
 			default:
 			{

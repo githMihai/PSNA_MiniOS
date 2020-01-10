@@ -308,3 +308,18 @@ int roundUp(double number)
 	}
 	//return ((int)number) ? (((int)number) == number) : ((int)number + 1);
 }
+
+void printBinary(BYTE number)
+{
+	int i = 7;
+	char s[9] = "00000000";
+
+	while (number > 0)
+	{
+		s[i] = ((number % 2) == 0 ? '0' : '1');
+		number = number / 2;
+		i--;
+	}
+	s[8] = 0;
+	printf("%s", s);
+}

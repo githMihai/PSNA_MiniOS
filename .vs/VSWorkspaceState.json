@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\MiniOS",
+    "\\MiniOS\\kernel",
+    "\\MiniOS\\kernel\\main",
+    "\\MiniOS\\kernel\\memory",
+    "\\MiniOS\\kernel\\pit",
+    "\\MiniOS\\kernel\\rtc",
+    "\\MiniOS\\kernel\\screen",
+    "\\MiniOS\\kernel\\stdfunc",
+    "\\MiniOS\\kernel\\timer"
+  ],
+  "SelectedNode": "\\MiniOS\\kernel\\timer\\timer.h",
+  "PreviewInSolutionExplorer": false
+}
